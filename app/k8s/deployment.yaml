@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: node
-          image: cloud.canister.io:5000/wolnik/nodeskaff
+          image: asvinwin123/k8-node
           ports:
             - containerPort: 3000
       imagePullSecrets:

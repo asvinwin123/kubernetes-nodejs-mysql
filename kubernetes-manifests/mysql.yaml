@@ -34,13 +34,35 @@ spec:
             # Use secret in real usage
             - name: MYSQL_ROOT_PASSWORD
               value: password
+            - name: MYSQL_DATABASE
+              value: test
           ports:
             - containerPort: 3306
               name: mysql
           volumeMounts:
             - name: mysql-persistent-storage
               mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
             claimName: mysql-pv-claim
+        - name: mysql-initdb
+          configMap:
+            name: mysql-initdb-config
+          #hostPath:
+          #path: /pathonhost/
+          #type: Directory
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-initdb-config
+data:
+  initdb.sql: |
+    CREATE TABLE `students` (`rollNo` int(11) NOT NULL, `name` varchar(255) DEFAULT NULL, PRIMARY KEY (`rollNo`)) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+    INSERT INTO `students` VALUES (1130328,'Varun Kumar');
+    INSERT INTO `students` VALUES (1130329,'Asvin Kumar');
+    INSERT INTO `students` VALUES (1130330,'Vinoth');
+    INSERT INTO `students` VALUES (1130331,'Divya Menon');
